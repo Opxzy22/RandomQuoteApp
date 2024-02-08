@@ -4,7 +4,7 @@ import axios from 'axios';
 import LoginScreen from '../screens/LoginScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 // Base URL for API requests
-const base_url = 'http://127.0.0.1:8000/api/';
+const base_url = 'http://172.20.10.3:8000/api/';
 
 const stack = createStackNavigator();
 
@@ -33,7 +33,7 @@ const RegistrationScreen = ({ navigation }) => {
                 console.error('Server responded with status:', error.response.status);
                 console.error('Response data:', error.response.data);
 
-                setError('Registration failed. Server error. Please try again later.');
+                setError('Registration failed. Please try again later.');
             } else if (error.request) {
                 // Handle no response error
                 console.error('No response received from the server');
@@ -50,12 +50,14 @@ const RegistrationScreen = ({ navigation }) => {
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.container}>
+                {/* Display error message */}
+                {error && <Text style={{ color: 'red' }}>{error}</Text>}
                 {/* Username input */}
                 <Text style={styles.label}>Username</Text>
                 <TextInput
                     style={styles.input}
                     value={username}
-                    placeholder="type username"
+                    placeholder="Type username"
                     onChangeText={setUsername}
                 />
 
@@ -66,7 +68,7 @@ const RegistrationScreen = ({ navigation }) => {
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
-                    placeholder="type email"
+                    placeholder="Type email"
                 />
 
                 {/* Password input */}
@@ -75,7 +77,7 @@ const RegistrationScreen = ({ navigation }) => {
                     style={styles.input}
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="type password"
+                    placeholder="Type password"
                     secureTextEntry
                 />
 
@@ -85,7 +87,7 @@ const RegistrationScreen = ({ navigation }) => {
                 {/* Registration button */}
                 <View style={styles.buttonContainer}>
                     <Button title="Register" onPress={handleRegistration} style={styles.button} />
-                    <Text style={styles.signinText}>
+                    <Text style={styles.signupLink}>
                     Already have an account?{' '}
                     <Text style={styles.signinText} onPress={() => navigation.navigate('Login')}>
                         Sign in
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 2,
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: 'silver',
         borderColor: 'silver',
         borderWidth: 1,
         marginBottom: 20,
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         marginBottom: 5,
-        color: 'blue',
+        color: 'silver',
     },
     input: {
         height: 40,
@@ -118,6 +120,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 10,
         paddingHorizontal: 10,
+        backgroundColor: 'white'
     },
     buttonContainer: {
         marginTop: 10,
@@ -128,17 +131,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     signupLink: {
-        color: 'white',
+        color: 'black',
+        marginBottom: 9
     },
     button: {
-        backgroundColor: 'blue',
+        backgroundColor: 'red',
     }
 });
 
-const LoginStack = () => (
-    <Stack.navigator>
-        <Stack.screen name='Login' component={LoginScreen} />
-    </Stack.navigator>
-);
 
 export default RegistrationScreen;

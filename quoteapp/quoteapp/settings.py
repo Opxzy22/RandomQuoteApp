@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-f161o1ula9jgj2i&(b$p(jn9j%pe39eis$$(r#pg!4_qi9=(rs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['172.20.10.3', 'localhost']
 
 
 # Application definition
@@ -73,15 +73,16 @@ AUTH_USER_MODEL = 'quotes.UserProfile'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # Add this line for CORS middleware
+    'corsheaders.middleware.CorsMiddleware',  
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',  # If you are using Django Debug Toolbar
+    'debug_toolbar.middleware.DebugToolbarMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 # settings.py
 
@@ -166,9 +167,23 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'  # 'mandatory', 'optional', or 'none'
 
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'aemmanex22@gmail.com'
+EMAIL_HOST_PASSWORD = 'yueenklaris1'
+
+
 
 
 ACCOUNT_ADAPTER = 'dj_rest_auth.adapter.RestAuthAccountAdapter'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8081",  # or the origin of your React Native app
+    # Add other allowed origins as needed
+]
 
 
 CORS_ALLOW_METHODS = [
@@ -182,6 +197,9 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_HEADERS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True  # For development/testing; set to False in production
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 
 # Internationalization
@@ -208,4 +226,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INTERNAL_IPS = [
      "127.0.0.1",
+     '172.20.10.3',
 ]

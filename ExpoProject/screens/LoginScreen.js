@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Text, TextInput, View, Button, StyleSheet } from 'react-native';
+import { Text, TextInput, View, Button, StyleSheet, StatusBar, Alert } from 'react-native';
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack';
 import RegistrationScreen from '../screens/RegistrationScreen';
 import MainScreen from "./MainScreen";
-import RandomQuotesScreen from "./JokesScreen";
-import MotivationScreen from './MotivationScreen';
+import Toast from 'react-native-toast-message';
+import ChangePasswordScreen from "./ChangePasswordScreen";
 
 // Base URL for API requests
-const base_url = 'http://127.0.0.1:8000/api/';
+const base_url = 'http://172.20.10.3:8000/api/';
 
 const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -19,7 +19,7 @@ const getCookie = (name) => {
 const Stack = createStackNavigator();
 
 // LoginScreen component
-const LoginScreen = ({ navigation }) => {
+export const LoginScreen = ({ navigation }) => {
   // State variables for username, password, and error
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -28,16 +28,24 @@ const LoginScreen = ({ navigation }) => {
   // Function to handle login
   const handleLogin = async () => {
     try {
-      // Make a POST request to the login endpoint
-      const response = await axios.post(`${base_url}login/`, { username, password },
-       { header: {'content-type': 'application/json'} });
+      if (!username || !password) {
+        setError('please enter both username and password');
+        Alert.alert('please enter username and password');
+        return;
+      }
+       // Make a POST request to the login endpoint
+    const response = await axios.post(
+      `${base_url}login/`,
+      { username, password },
+      { headers: { 'content-type': 'application/json' } }
+    );
       console.log('Login Successful', response.data);
 
       // Navigate to the 'home' screen upon successful login
       navigation.navigate('home');
     } catch (error) {
       // Log and set an error message if login fails
-      console.error('Login failed', error.message);
+      console.error('Login failed', error);
       setError('Login failed. Please check your credentials');
     }
   };
@@ -45,6 +53,8 @@ const LoginScreen = ({ navigation }) => {
   // JSX structure for the LoginScreen
   return (
     <View style={styles.container}>
+      {/* Display error message */}
+      {error && <Text style={{ color: 'red' }}>{error}</Text>}
       {/* Username input */}
       <Text style={styles.label}>Username</Text>
       <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="input username" />
@@ -63,6 +73,13 @@ const LoginScreen = ({ navigation }) => {
           Sign up
         </Text>
       </Text>
+      <Text style={styles.signupText}>
+        forgotten password?{' '}
+        <Text style={styles.signupLink} onPress={() => navigation.navigate('changePassword')}>
+          change password
+        </Text>
+      </Text>
+      <StatusBar barStyle="light-content" backgroundColor="black" />
     </View>
   );
 };
@@ -71,15 +88,15 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-    backgroundColor: 'black',
+    backgroundColor: 'silver',
     borderColor: 'white',
     borderWidth: 0,
-    flex: 50,
+    flex: 1,
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: 'white'
+    color: 'black'
   },
   input: {
     height: 40,
@@ -92,10 +109,12 @@ const styles = StyleSheet.create({
   signupText: {
     marginTop: 20,
     textAlign: 'center',
-    color: 'white'
+    color: 'black'
   },
   signupLink: {
-    color: 'white',
+    color: 'black',
+    textAlign: 'right',
+    marginTop: 20,
   },
 });
 
@@ -104,11 +123,11 @@ const RegistrationStack = () => (
     <Stack.Navigator>
         <Stack.Screen name='Login' component={LoginScreen} options={{
             headerStyle: {
-                backgroundColor: 'black',
+                backgroundColor: 'lightgreen',
                 borderWidth: 0,
-                borderColor: 'white',
+                borderColor: 'black',
             },
-            headerTintColor: 'white',
+            headerTintColor: 'black',
             headerTitleStyle: {
                 fontSize: 36,
                 fontWeight: 'bold',
@@ -119,11 +138,12 @@ const RegistrationStack = () => (
         <Stack.Screen name='Registration' component={RegistrationScreen} options={{
             
             headerStyle: {
-                backgroundColor: 'black',
-                borderWidth: 1,
-                borderColor: 'silver',
+                backgroundColor: 'lightgreen',
+                borderWidth: 0,
+                borderColor: 'black',
+
             },
-            headerTintColor: 'white',
+            headerTintColor: 'black',
             headerTitleStyle: {
                 fontSize: 30,
                 fontWeight: 'bold',
@@ -134,6 +154,21 @@ const RegistrationStack = () => (
             component={MainScreen}
             options={{
             headerShown: false
+        }} />
+       
+     <Stack.Screen name='changePassword' component={ChangePasswordScreen} options={{
+            
+            headerStyle: {
+                backgroundColor: 'white',
+                borderWidth: 1,
+                borderColor: 'black',
+
+            },
+            headerTintColor: 'black',
+            headerTitleStyle: {
+                fontSize: 30,
+                fontWeight: 'bold',
+            }
         }} />
     </Stack.Navigator>
 );

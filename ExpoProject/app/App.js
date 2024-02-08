@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import RegistrationScreen from '../screens/RegistrationScreen';
 import LoginScreen from '../screens/LoginScreen';
+import MainScreen from '../screens/MainScreen'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -13,32 +14,34 @@ const Stack = createStackNavigator();
 const RegistrationStack = () => (
   <Stack.Navigator>
     <Stack.Screen name='Login' component={LoginScreen} />
-    <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
+    <Stack.Screen name='home' component={MainScreen} />
   </Stack.Navigator>
 );
 
 const App = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: 'gold' }}>
+    <View style={{ flex: 1, backgroundColor: 'blue' }}>
       <NavigationContainer independent={true}>
         <Tab.Navigator>
           <Tab.Screen
-            name=' '
+            name='login'
             component={LoginScreen}
             options={{
+              headerShown: false,
               tabBarLabel: () => null, // Hide the label
+              tabBarIcon: () => null,
+             
               tabBarStyle: {
-                backgroundColor: 'white',
+                backgroundColor: 'silver',
               },
               tabBarItemStyle: {
-                padding: 300, // Set padding for the individual tab item
+                padding: 200, // 
               },
               tabBarLabelStyle: {
-                color: 'white',
+                color: 'black',
               },
             }}
           />
-          {/* Add more tabs/screens if needed */}
         </Tab.Navigator>
       </NavigationContainer>
     </View>
