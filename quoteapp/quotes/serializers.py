@@ -10,8 +10,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model
         fields = ('id', 'email', 'username')
 
-from rest_framework import serializers
-from django.contrib.auth import get_user_model
 
 class RegisterSerializer(serializers.ModelSerializer):
     """
